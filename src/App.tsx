@@ -1,10 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { MainLayout } from "@/MainLayout";
+import { MainLayout } from "@/layouts";
 import {
   CareerView,
   CreditsView,
   EpisodeView,
   ErrorView,
+  FavoritesView,
   GenreView,
   HomeView,
   ImagesView,
@@ -15,6 +16,7 @@ import {
   ReviewsView,
   SearchView,
   SeasonsView,
+  SettingsView,
   TelevisionView,
   TrailersView,
   TrendingView,
@@ -47,6 +49,8 @@ export const App = () => {
           <Route element={<ImagesView />} path="images" />
         </Route>
         <Route element={<GenreView />} path="genre/:mediaType/:genre" />
+        <Route element={<FavoritesView />} path="/favorites" />
+        <Route element={<SettingsView />} path="/settings" />
       </Route>
       <Route element={<ErrorView />} path="*" />
     </Routes>

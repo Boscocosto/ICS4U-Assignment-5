@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ImageGrid, Pagination } from "@/components";
-import { getImageUrl, type ImageCell, type MovieResponse, NOW_PLAYING_ENDPOINT } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay, Pagination } from "@/components";
+import { favoriteAction, getImageUrl, type ImageCell, type MovieResponse, NOW_PLAYING_ENDPOINT } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const NowPlayingView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
+  const { favorites, toggleFavorite } = useUserContext();
   const { data } = useTmdb<MovieResponse>(NOW_PLAYING_ENDPOINT, { page });
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
@@ -22,7 +23,11 @@ export const NowPlayingView = () => {
   return (
     <section className="mx-auto max-w-7xl space-y-5 p-5">
       <h1 className="mb-4 font-bold text-3xl">Now Playing</h1>
-      <ImageGrid images={gridData} onClick={(image) => navigate(`/movie/${image.id}/credits`)} />
+      <ImageGrid images={gridData} onClick={(image) => navigate(`/movie/${image.id}/credits`)}>
+        {(image) => (
+          <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+        )}
+      </ImageGrid>
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );
