@@ -1,10 +1,13 @@
-import { useParams } from "react-router-dom";
-import { MOVIE_ENDPOINT, type MovieResponse } from "@/core";
+import { useLocation ,useParams } from "react-router-dom";
+import { MOVIE_ENDPOINT, TV_ENDPOINT, type MovieResponse } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const TrailersView = () => {
   const { id } = useParams();
-  const { data } = useTmdb<MovieResponse>(`${MOVIE_ENDPOINT}/${id}`, { append_to_response: "videos" });
+  const { pathname } = useLocation();
+  const TvRoute = pathname.startsWith("/tv");
+  const endpoint = TvRoute ? TV_ENDPOINT : MOVIE_ENDPOINT;
+  const { data } = useTmdb<MovieResponse>(`${endpoint}/${id}`, { append_to_response: "videos" });
 
   const trailerVideo =
     data?.videos?.results.find((v) => v.site === "YouTube" && v.type === "Trailer" && v.name?.toLowerCase().includes("official")) ||

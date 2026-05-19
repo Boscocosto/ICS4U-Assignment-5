@@ -1,12 +1,15 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ImageGrid } from "@/components";
-import { type CreditsResponse, getImageUrl, type ImageCell, MOVIE_ENDPOINT } from "@/core";
+import { type CreditsResponse, getImageUrl, type ImageCell, MOVIE_ENDPOINT, TV_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const CreditsView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data } = useTmdb<CreditsResponse>(`${MOVIE_ENDPOINT}/${id}/credits`, {});
+  const { pathname } = useLocation();
+  const TvRoute = pathname.startsWith("/tv");
+  const endpoint = TvRoute ? TV_ENDPOINT : MOVIE_ENDPOINT;
+  const { data } = useTmdb<CreditsResponse>(`${endpoint}/${id}/credits`, {});
 
   const gridData: ImageCell[] = (data?.cast ?? []).map((result) => ({
     id: result.id,
