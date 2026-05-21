@@ -6,12 +6,15 @@ import { useDebounce, useTmdb } from "@/hooks";
 
 export const SearchView = () => {
   const navigate = useNavigate();
-  const [query] = useState("");
   const [page, setPage] = useState<number>(1);
-  const debouncedQuery = useDebounce(query, RATE_LIMIT_DELAY);
   const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") ?? "";
   const type = searchParams.get("type") ?? "movie";
-  const { data } = useTmdb<SearchResponse>(`${SEARCH_ENDPOINT}/${type}`, { page, query: debouncedQuery });
+  const debouncedQuery = useDebounce(query, RATE_LIMIT_DELAY);
+  const { data } = useTmdb<SearchResponse>(`${SEARCH_ENDPOINT}/${type}`, {
+    page,
+    query: debouncedQuery,
+  });
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id,
@@ -29,13 +32,9 @@ export const SearchView = () => {
       <ImageGrid
         images={gridData}
         onClick={(image) => {
-          if (type === "movie") {
-            navigate(`/movie/${image.id}/credits`);
-          } else if (type === "tv") {
-            navigate(`/tv/${image.id}/seasons`);
-          } else {
-            navigate(`/person/${image.id}/career`);
-          }
+          if (type === "movie") navigate(`/movie/${image.id}/credits`);
+          else if (type === "tv") navigate(`/tv/${image.id}/seasons`);
+          else navigate(`/person/${image.id}/career`);
         }}
       />
       {data.results.length ? (

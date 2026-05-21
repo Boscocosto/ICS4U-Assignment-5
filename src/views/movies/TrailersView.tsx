@@ -1,5 +1,5 @@
-import { useLocation ,useParams } from "react-router-dom";
-import { MOVIE_ENDPOINT, TV_ENDPOINT, type MovieResponse } from "@/core";
+import { useLocation, useParams } from "react-router-dom";
+import { MOVIE_ENDPOINT, type MovieResponse, TV_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const TrailersView = () => {

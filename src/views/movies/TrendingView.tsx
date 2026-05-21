@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ImageGrid, Pagination } from "@/components";
-import { getImageUrl, type ImageCell, type MovieResponse, TRENDING_ENDPOINT } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay, Pagination } from "@/components";
+import { favoriteAction, getImageUrl, type ImageCell, type MovieResponse, TRENDING_ENDPOINT } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const TrendingView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const { category } = useParams();
+  const { favorites, toggleFavorite } = useUserContext();
   const interval = searchParams.get("interval") || "day";
   const movieType = category === "movies" ? "movie" : "tv";
+  
   const { data } = useTmdb<MovieResponse>(`${TRENDING_ENDPOINT}/${movieType}/${interval}`, { interval, movieType, page });
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
@@ -60,7 +62,11 @@ export const TrendingView = () => {
       <ImageGrid
         images={gridData}
         onClick={(image) => navigate(movieType === "movie" ? `/movie/${image.id}/credits` : `/tv/${image.id}/seasons`)}
-      />
+      >
+        {(image) => (
+          <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+        )}
+      </ImageGrid>
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

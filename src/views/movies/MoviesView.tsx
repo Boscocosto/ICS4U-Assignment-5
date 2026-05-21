@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageGrid, Pagination } from "@/components";
-import { getImageUrl, type ImageCell, MOVIE_ENDPOINT, type MovieResponse } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay, Pagination } from "@/components";
+import { favoriteAction, getImageUrl, type ImageCell, MOVIE_ENDPOINT, type MovieResponse } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const MoviesView = () => {
   const navigate = useNavigate();
   const { category } = useParams();
+  const { favorites, toggleFavorite } = useUserContext();
   const movieCategory = category || "now_playing";
   const [page, setPage] = useState<number>(1);
 
@@ -43,7 +44,11 @@ export const MoviesView = () => {
           ))}
         </div>
       </div>
-      <ImageGrid images={gridData} onClick={(image) => navigate(`/movie/${image.id}/credits`)} />
+      <ImageGrid images={gridData} onClick={(image) => navigate(`/movie/${image.id}/credits`)}>
+        {(image) => (
+          <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+        )}
+      </ImageGrid>
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

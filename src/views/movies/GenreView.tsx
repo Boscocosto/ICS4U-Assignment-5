@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageGrid, Pagination } from "@/components";
-import { DISCOVER_ENDPOINT, type GenreResponse, getImageUrl, type ImageCell } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay, Pagination } from "@/components";
+import { favoriteAction, DISCOVER_ENDPOINT, type GenreResponse, getImageUrl, type ImageCell } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const GenreView = () => {
   const navigate = useNavigate();
   const { mediaType: routeMediaType, genre: routeGenre } = useParams();
+  const { favorites, toggleFavorite } = useUserContext();
   const mediaType = routeMediaType || "movie";
   const genreValue = routeGenre || "action";
 
@@ -87,9 +88,13 @@ export const GenreView = () => {
       {data?.results && (
         <>
           <ImageGrid
-            images={gridData}
-            onClick={(image) => navigate(mediaType === "movie" ? `/movie/${image.id}/credits` : `/tv/${image.id}/seasons`)}
-          />
+        images={gridData}
+        onClick={(image) => navigate(mediaType === "movie" ? `/movie/${image.id}/credits` : `/tv/${image.id}/seasons`)}
+      >
+        {(image) => (
+          <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+        )}
+      </ImageGrid>
           <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
         </>
       )}
