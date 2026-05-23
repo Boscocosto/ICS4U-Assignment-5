@@ -8,11 +8,11 @@ export const GenreView = () => {
   const navigate = useNavigate();
   const { mediaType: routeMediaType, genre: routeGenre } = useParams();
   const { favorites, toggleFavorite } = useUserContext();
-  const { visibleMovieGenres, visibleTvGenres } = useUserContext();
+  const { movieGenres, TvGenres } = useUserContext();
   const mediaType = routeMediaType || "movie";
   const genreValue = routeGenre || "action";
 
-  const movieGenres = [
+  const movie = [
     { id: "28", name: "Action", value: "action" },
     { id: "12", name: "Adventure", value: "adventure" },
     { id: "16", name: "Animation", value: "animation" },
@@ -23,7 +23,7 @@ export const GenreView = () => {
     { id: "10749", name: "Romance", value: "romance" },
   ];
 
-  const tvGenres = [
+  const tv = [
     { id: "10759", name: "Action & Adventure", value: "action_adventure" },
     { id: "16", name: "Animation", value: "animation" },
     { id: "35", name: "Comedy", value: "comedy" },
@@ -34,8 +34,8 @@ export const GenreView = () => {
     { id: "10765", name: "Sci-Fi & Fantasy", value: "sci_fi_fantasy" },
   ];
 
-  const genres = (mediaType === "movie" ? movieGenres : tvGenres).filter((g) =>
-    mediaType === "movie" ? visibleMovieGenres.includes(g.value) : visibleTvGenres.includes(g.value),
+  const genres = (mediaType === "movie" ? movie : tv).filter((g) =>
+    mediaType === "movie" ? movieGenres.includes(g.value) : TvGenres.includes(g.value),
   );
 
   if (!genres.some((g) => g.value === genreValue)) {
@@ -47,7 +47,7 @@ export const GenreView = () => {
   const { data } = useTmdb<GenreResponse>(`${DISCOVER_ENDPOINT}/${mediaType}`, { page, with_genres: genreId });
 
   const MediaTypeChange = (type: string) => {
-    const firstGenre = (type === "movie" ? movieGenres : tvGenres)[0].value;
+    const firstGenre = (type === "movie" ? movie : tv)[0].value;
     navigate(`/genre/${type}/${firstGenre}`);
     setPage(1);
   };

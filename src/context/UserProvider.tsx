@@ -14,10 +14,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     serialize: (map) => Array.from(map.entries()),
   });
 
-  const DEFAULT_MOVIE_GENRES = ["action", "adventure", "animation", "comedy", "crime", "drama", "horror", "romance"];
-  const DEFAULT_TV_GENRES = ["action_adventure", "animation", "comedy", "crime", "drama", "kids", "mystery", "sci_fi_fantasy"];
-  const [visibleMovieGenres, setVisibleMovieGenres] = useLocalStorage<string[], string[]>("visibleMovieGenres", DEFAULT_MOVIE_GENRES);
-  const [visibleTvGenres, setVisibleTvGenres] = useLocalStorage<string[], string[]>("visibleTvGenres", DEFAULT_TV_GENRES);
+  const MOVIE_GENRES = ["action", "adventure", "animation", "comedy", "crime", "drama", "horror", "romance"];
+  const TV_GENRES = ["action_adventure", "animation", "comedy", "crime", "drama", "kids", "mystery", "sci_fi_fantasy"];
+  const [movieGenres, setMovieGenres] = useLocalStorage<string[], string[]>("movieGenres", MOVIE_GENRES);
+  const [TvGenres, setTvGenres] = useLocalStorage<string[], string[]>("TvGenres", TV_GENRES);
 
   const toggleFavorite = (image: ImageCell) => {
     setFavorites((prev) => {
@@ -27,9 +27,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     });
   };
 
-  const toggleGenreVisibility = (mediaType: "movie" | "tv", genre: string) => {
-    const list = mediaType === "movie" ? visibleMovieGenres : visibleTvGenres;
-    const setter = mediaType === "movie" ? setVisibleMovieGenres : setVisibleTvGenres;
+  const toggleGenre = (mediaType: "movie" | "tv", genre: string) => {
+    const list = mediaType === "movie" ? movieGenres : TvGenres;
+    const setter = mediaType === "movie" ? setMovieGenres : setTvGenres;
 
     if (list.length === 1 && list.includes(genre)) return;
 
@@ -40,14 +40,13 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   return (
     <UserContext.Provider
       value={{
-        userName,
-        setUserName,
         favorites,
+        setUserName,
         toggleFavorite,
-
-        visibleMovieGenres,
-        visibleTvGenres,
-        toggleGenreVisibility,
+        toggleGenre,
+        userName,
+        movieGenres,
+        TvGenres,
       }}
     >
       {children}
