@@ -10,8 +10,8 @@ export const CareerView = () => {
 
   const gridData: ImageCell[] = (data?.cast ?? []).map((result) => ({
     id: result.id,
-    imageUrl: getImageUrl(result.poster_path ?? ""),
-    primaryText: result.title ?? result.name ?? "",
+    imageUrl: getImageUrl(result.poster_path),
+    primaryText: result.title ?? result.name,
   }));
 
   if (!data) {

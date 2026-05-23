@@ -18,8 +18,8 @@ export const SearchView = () => {
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id,
-    imageUrl: getImageUrl(result.poster_path ?? result.profile_path ?? ""),
-    primaryText: result.original_title ?? result.name ?? "",
+    imageUrl: getImageUrl(result.poster_path ?? result.profile_path),
+    primaryText: result.original_title ?? result.name,
   }));
 
   if (!data) {

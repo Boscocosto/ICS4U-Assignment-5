@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, ImageOverlay, Pagination } from "@/components";
-import { favoriteAction, DISCOVER_ENDPOINT, type GenreResponse, getImageUrl, type ImageCell } from "@/core";
+import { DISCOVER_ENDPOINT, favoriteAction, type GenreResponse, getImageUrl, type ImageCell } from "@/core";
 import { useTmdb, useUserContext } from "@/hooks";
 
 export const GenreView = () => {
   const navigate = useNavigate();
   const { mediaType: routeMediaType, genre: routeGenre } = useParams();
   const { favorites, toggleFavorite } = useUserContext();
+  const { visibleMovieGenres, visibleTvGenres } = useUserContext();
   const mediaType = routeMediaType || "movie";
   const genreValue = routeGenre || "action";
 
@@ -33,7 +34,14 @@ export const GenreView = () => {
     { id: "10765", name: "Sci-Fi & Fantasy", value: "sci_fi_fantasy" },
   ];
 
-  const genres = mediaType === "movie" ? movieGenres : tvGenres;
+  const genres = (mediaType === "movie" ? movieGenres : tvGenres).filter((g) =>
+    mediaType === "movie" ? visibleMovieGenres.includes(g.value) : visibleTvGenres.includes(g.value),
+  );
+
+  if (!genres.some((g) => g.value === genreValue)) {
+    navigate(`/genre/${mediaType}/${genres[0].value}`);
+  }
+
   const genreId = genres.find((g) => g.value === genreValue)?.id ?? genres[0].id;
   const [page, setPage] = useState<number>(1);
   const { data } = useTmdb<GenreResponse>(`${DISCOVER_ENDPOINT}/${mediaType}`, { page, with_genres: genreId });
@@ -88,13 +96,13 @@ export const GenreView = () => {
       {data?.results && (
         <>
           <ImageGrid
-        images={gridData}
-        onClick={(image) => navigate(mediaType === "movie" ? `/movie/${image.id}/credits` : `/tv/${image.id}/seasons`)}
-      >
-        {(image) => (
-          <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
-        )}
-      </ImageGrid>
+            images={gridData}
+            onClick={(image) => navigate(mediaType === "movie" ? `/movie/${image.id}/credits` : `/tv/${image.id}/seasons`)}
+          >
+            {(image) => (
+              <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+            )}
+          </ImageGrid>
           <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
         </>
       )}

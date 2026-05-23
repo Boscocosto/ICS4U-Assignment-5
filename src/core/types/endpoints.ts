@@ -41,7 +41,7 @@ export type SeasonsResponse = {
     id: number;
     name: string;
     season_number: number;
-    poster_path: string | null;
+    poster_path: string;
     air_date: string;
   }>;
 };
@@ -53,7 +53,7 @@ export type EpisodeResponse = {
   episodes: Array<{
     id: number;
     name: string;
-    still_path: string | null;
+    still_path: string;
     episode_number: number;
     air_date: string;
   }>;
@@ -63,7 +63,7 @@ export type CreditsResponse = {
   cast: Array<{
     id: number;
     name: string;
-    profile_path: string | null;
+    profile_path: string;
     character: string;
   }>;
 };
@@ -81,8 +81,8 @@ export type SearchResponse = {
     id: number;
     name?: string;
     title?: string;
-    profile_path: string | null;
-    poster_path?: string | null;
+    profile_path: string;
+    poster_path?: string;
     original_title?: string;
     original_name?: string;
   }>;
@@ -104,7 +104,7 @@ export type CareerResponse = {
     id: number;
     title?: string;
     name?: string;
-    poster_path: string | null;
+    poster_path: string;
     character: string;
     media_type: string;
     first_air_date?: string;

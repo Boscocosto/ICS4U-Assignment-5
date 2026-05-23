@@ -27,7 +27,7 @@ export const MovieView = () => {
             <h1 className="font-bold text-3xl">{data.title}</h1>
             <p className="text-gray-300 leading-relaxed">{data.overview}</p>
             <div className="grid grid-cols-2 gap-4 pt-2">
-              <DetailItem label="Release" value={data.release_date} />
+              <DetailItem label="Release" value={Tv ? (data.first_air_date ?? "") : (data.release_date ?? "")} />
               <DetailItem label="Rating" value={data.vote_average} />
             </div>
             <LinkGroup

@@ -12,7 +12,7 @@ export const TrendingView = () => {
   const { favorites, toggleFavorite } = useUserContext();
   const interval = searchParams.get("interval") || "day";
   const movieType = category === "movies" ? "movie" : "tv";
-  
+
   const { data } = useTmdb<MovieResponse>(`${TRENDING_ENDPOINT}/${movieType}/${interval}`, { interval, movieType, page });
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({

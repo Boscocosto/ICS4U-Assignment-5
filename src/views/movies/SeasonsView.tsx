@@ -11,7 +11,7 @@ export const SeasonsView = () => {
 
   const gridData = (data?.seasons ?? []).map((season) => ({
     id: season.season_number,
-    imageUrl: getImageUrl(season.poster_path ?? ""),
+    imageUrl: getImageUrl(season.poster_path),
     primaryText: season.name,
     secondaryText: season.air_date,
   }));
