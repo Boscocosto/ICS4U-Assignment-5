@@ -13,7 +13,7 @@ export const CreditsView = () => {
 
   const gridData: ImageCell[] = (data?.cast ?? []).map((result) => ({
     id: result.id,
-    imageUrl: getImageUrl(result.profile_path ?? ""),
+    imageUrl: getImageUrl(result.profile_path),
     primaryText: result.name,
     secondaryText: result.character,
   }));

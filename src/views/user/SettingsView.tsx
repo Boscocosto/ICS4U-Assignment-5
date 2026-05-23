@@ -4,6 +4,7 @@ import { useUserContext } from "@/hooks";
 
 export const SettingsView = () => {
   const { userName, setUserName } = useUserContext();
+  const { visibleMovieGenres, visibleTvGenres, toggleGenreVisibility } = useUserContext();
   const [value, setValue] = useState(userName);
   const [error, setError] = useState("");
 
@@ -48,6 +49,50 @@ export const SettingsView = () => {
           >
             Save
           </Button>
+        </div>
+      </div>
+      <div className="max-w-md space-y-4 rounded-2xl border border-gray-700 bg-gray-900 p-6">
+        <h2 className="font-semibold text-lg">Movie Genres</h2>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { id: "28", name: "Action", value: "action" },
+            { id: "12", name: "Adventure", value: "adventure" },
+            { id: "16", name: "Animation", value: "animation" },
+            { id: "35", name: "Comedy", value: "comedy" },
+            { id: "80", name: "Crime", value: "crime" },
+            { id: "18", name: "Drama", value: "drama" },
+            { id: "27", name: "Horror", value: "horror" },
+            { id: "10749", name: "Romance", value: "romance" },
+          ].map((g) => (
+            <label key={g.value} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={visibleMovieGenres.includes(g.value)}
+                onChange={() => toggleGenreVisibility("movie", g.value)}
+              />
+              {g.name}
+            </label>
+          ))}
+        </div>
+        <div className="max-w-md space-y-4 rounded-2xl border border-gray-700 bg-gray-900 p-6">
+          <h2 className="font-semibold text-lg">TV Genres</h2>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { id: "10759", name: "Action & Adventure", value: "action_adventure" },
+              { id: "16", name: "Animation", value: "animation" },
+              { id: "35", name: "Comedy", value: "comedy" },
+              { id: "80", name: "Crime", value: "crime" },
+              { id: "18", name: "Drama", value: "drama" },
+              { id: "10762", name: "Kids", value: "kids" },
+              { id: "9648", name: "Mystery", value: "mystery" },
+              { id: "10765", name: "Sci-Fi & Fantasy", value: "sci_fi_fantasy" },
+            ].map((g) => (
+              <label key={g.value} className="flex items-center gap-2">
+                <input type="checkbox" checked={visibleTvGenres.includes(g.value)} onChange={() => toggleGenreVisibility("tv", g.value)} />
+                {g.name}
+              </label>
+            ))}
+          </div>
         </div>
       </div>
     </section>
