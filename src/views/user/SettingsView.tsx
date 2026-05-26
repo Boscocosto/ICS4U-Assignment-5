@@ -65,12 +65,8 @@ export const SettingsView = () => {
                 { id: "27", name: "Horror", value: "horror" },
                 { id: "10749", name: "Romance", value: "romance" },
               ].map((g) => (
-                <label key={g.value} className="flex items-center gap-2 text-gray-400 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={movieGenres.includes(g.value)}
-                    onChange={() => toggleGenre("movie", g.value)}
-                  />
+                <label className="flex items-center gap-2 text-gray-400 text-sm" key={g.value}>
+                  <input checked={movieGenres.includes(g.value)} onChange={() => toggleGenre("movie", g.value)} type="checkbox" />
                   {g.name}
                 </label>
               ))}
@@ -89,12 +85,8 @@ export const SettingsView = () => {
                 { id: "9648", name: "Mystery", value: "mystery" },
                 { id: "10765", name: "Sci-Fi & Fantasy", value: "sci_fi_fantasy" },
               ].map((g) => (
-                <label key={g.value} className="flex items-center gap-2 text-gray-400 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={TvGenres.includes(g.value)}
-                    onChange={() => toggleGenre("tv", g.value)}
-                  />
+                <label className="flex items-center gap-2 text-gray-400 text-sm" key={g.value}>
+                  <input checked={TvGenres.includes(g.value)} onChange={() => toggleGenre("tv", g.value)} type="checkbox" />
                   {g.name}
                 </label>
               ))}

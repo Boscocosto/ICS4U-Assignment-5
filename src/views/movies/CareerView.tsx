@@ -27,7 +27,7 @@ export const CareerView = () => {
           const item = data.cast.find((c) => c.id === image.id);
           const Tv = item?.media_type === "tv" || !!item?.first_air_date;
           if (Tv) {
-            navigate(`/tv/show/${image.id}/credits`);
+            navigate(`/tv/${image.id}/credits`);
           } else {
             navigate(`/movie/${image.id}/credits`);
           }

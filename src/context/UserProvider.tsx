@@ -41,12 +41,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     <UserContext.Provider
       value={{
         favorites,
+        movieGenres,
         setUserName,
+        TvGenres,
         toggleFavorite,
         toggleGenre,
         userName,
-        movieGenres,
-        TvGenres,
       }}
     >
       {children}

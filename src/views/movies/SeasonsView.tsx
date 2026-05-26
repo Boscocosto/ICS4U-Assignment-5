@@ -1,12 +1,12 @@
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { ImageGrid } from "@/components";
-import { getImageUrl, type SeasonsResponse, TV_ENDPOINT } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay } from "@/components";
+import { favoriteAction, getImageUrl, type SeasonsResponse, TV_ENDPOINT } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const SeasonsView = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-
+  const { favorites, toggleFavorite } = useUserContext();
   const { data } = useTmdb<SeasonsResponse>(`${TV_ENDPOINT}/${id}`, {});
 
   const gridData = (data?.seasons ?? []).map((season) => ({
@@ -25,7 +25,9 @@ export const SeasonsView = () => {
       <h2 className="mb-6 font-bold text-2xl">Seasons</h2>
       {data.seasons.length ? (
         <>
-          <ImageGrid images={gridData} onClick={(image) => navigate(`/tv/${id}/season/${image.id}`)} />
+          <ImageGrid images={gridData} onClick={(image) => navigate(`/tv/${id}/season/${image.id}`)}>
+            {(image) => <ImageOverlay actions={[favoriteAction((image) => favorites.has(image.id), toggleFavorite)]} image={image} />}
+          </ImageGrid>
           <Outlet />
         </>
       ) : (
